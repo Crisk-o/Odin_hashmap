@@ -36,20 +36,26 @@ class HashMap{
             bucket.prepend([key, value]);
             this.size++;
             //growth logic
-            // if((this.buckets.length/this.capacity) > loadFactor){
-            //     this.resize();
-            // }
+            if(this.size > this.capacity * this.loadFactor)
+                this.resize();
         }
     }
     // for use in the set function to increase the capacity/# of buckets
     resize(){
         let oldBuckets = this.buckets;
         this.capacity *= 2;
-        let newBuckets = new Array(capacity);
+        this.buckets = Array.from({length: this.capacity}, () => new LinkedLists());
+        this.size = 0;
+        //LOOP THROUGH EVERY OLD BUCKET
         for(let i = 0; i < oldBuckets.length; i++){
-            let index = this.hash(key);
-            
-
+            let current = oldBuckets[i].root;
+            // LOOP THROUGH EVERY LL CONTAINED IN EACH BUCKET.
+            while(current !== null){
+                const [key, value] = current.info;
+                // RE-SET THE KEY,VALUE PAIRS INTO A NEW, LARGER BUCKET ARRAY.
+                this.set(key, value);  
+                current = current.nextNode;
+            }
         }
     }
 
@@ -76,19 +82,28 @@ class HashMap{
         // RETURN T/F IF KEY IS FOUND IN BUCKET AT INDEX.
         return bucket.contains(key);
     }
-    // given key, if it is in hash map, revemo entry with that key and return true, else false.
+    // given key, if it is in hash map, remove entry with that key and return true, else false.
     remove(key){
-
+        if(this.has(key)){
+            // delete the key and its entries
+            const index = this.hash(key);
+            const bucket = this.buckets[index];
+            bucket.removeAt(index);
+            this.size--;
+            return true;
+        }  
+        return false;
     }
     // returns number of stored keys in the hash map
     length(){
-        let count = 0;
-        for(let i = 0; i < this.buckets.length; i++){
-            count += this.buckets[i].size();
-        }
-        return count;
+        // let count = 0;
+        // for(let i = 0; i < this.buckets.length; i++){
+        //     count += this.buckets[i].size();
+        // }
+        // return count;
+        return this.size;
     }
-    // removes all entires in the hash map
+    // removes all entries in the hash map
     clear(){
 
     }
