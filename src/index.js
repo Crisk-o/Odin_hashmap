@@ -1,5 +1,6 @@
 import {Node, LinkedLists} from "./nodes_LL.js";
 import { HashMap } from "./hashmap.js";
+import { HashSet } from "./hashset.js";
 
 
 
@@ -29,3 +30,12 @@ test.remove('hat');
 console.log("AFTER 'DOG' & 'HAT' KEY REMOVALS:\n" + test.entries());
 test.clear();
 console.log(test.entries()) // should be empty!
+
+const hashSetTest = new HashSet();
+hashSetTest.set("a");
+hashSetTest.set("b");
+hashSetTest.set("c");
+console.log(hashSetTest.get("a")); // gets 'a'
+console.log(hashSetTest.has('b')); // true
+hashSetTest.remove('a');
+console.log(hashSetTest.keys()); // Keys: b, c
