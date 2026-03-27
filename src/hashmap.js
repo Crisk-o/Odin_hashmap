@@ -1,6 +1,6 @@
-import {Node, LinkedLists} from nodes_LL;
+import {Node, LinkedLists} from "./nodes_LL.js";
 
-class HashMap{
+export class HashMap{
     constructor(){
         this.size = 0;
         this.loadFactor = 0.75;
@@ -35,10 +35,12 @@ class HashMap{
         // IF NOT FOUND. ADD A NEW KEY(NODE W/KEY VALUE PAIR) 
             bucket.prepend([key, value]);
             this.size++;
+        
             //growth logic
             if(this.size > this.capacity * this.loadFactor)
                 this.resize();
         }
+
     }
     // for use in the set function to increase the capacity/# of buckets
     resize(){
@@ -52,8 +54,10 @@ class HashMap{
             // LOOP THROUGH EVERY LL CONTAINED IN EACH BUCKET.
             while(current !== null){
                 const [key, value] = current.info;
-                // RE-SET THE KEY,VALUE PAIRS INTO A NEW, LARGER BUCKET ARRAY.
-                this.set(key, value);  
+                let index = this.hash(key);
+                this.buckets[index].prepend([key, value]);
+                this.size++;
+
                 current = current.nextNode;
             }
         }
@@ -80,7 +84,7 @@ class HashMap{
         // GO TO INDEX POSITION IN BUCKETS ARRAY OF LL
         const bucket = this.buckets[index]
         // RETURN T/F IF KEY IS FOUND IN BUCKET AT INDEX.
-        return bucket.contains(key);
+        return bucket.containsKey(key);
     }
     // given key, if it is in hash map, remove entry with that key and return true, else false.
     remove(key){
@@ -105,25 +109,59 @@ class HashMap{
     }
     // removes all entries in the hash map
     clear(){
-
+        this.buckets = Array.from({length: this.capacity}, () => new LinkedLists());
+        this.size = 0;
     }
     // returns an array containing all keys inside hash map
     keys(){
+        let keyArray = [];
+        for(let i = 0; i < this.buckets.length; i++){
+            if(this.buckets[i].root !== null){
+                let key = this.buckets[i].root.info[0];
+                keyArray.push(key);
+            }
 
+            
+            // if(this.buckets[i].root !== null){
+            //     let current = this.buckets[i].root;  
+            //     while(current !== null){
+            //         keyArray.push(current.info[0]);
+            //         current = current.nextNode;
+            //     }
+            // }
+        }
+        return "Keys: " + keyArray.toString();
     }
 
     //returns array containg all the values
     values(){
-
+        let valueArray = [];
+        //LOOP THROUGH EVERY BUCKET
+        for(let i = 0; i < this.buckets.length; i++){
+            if(this.buckets[i].root !== null){
+                let value = this.buckets[i].root.info[1];
+                valueArray.push(value);
+            }
+        }
+        return "Values: " + valueArray.toString();
     }
     // returns array that contains each key,value pair. 
     // Ex: [[firstKey, firstValue], [secondKey, secondValue]]
     entries(){
-
+        let keyValArr = [];
+        //LOOP THROUGH EVERY BUCKET
+        for(let i = 0; i < this.buckets.length; i++){
+            if(this.buckets[i].root !== null){
+                keyValArr.push(this.buckets[i].root.info);
+                // LOOP THROUGH EVERY LL CONTAINED IN EACH BUCKET.
+                // while(current !== null){
+                //     const [key, value] = current.info;
+                //     keyValArr.push([key, value]);  
+                //     current = current.nextNode;
+                // }
+            }
+        }
+        return "Key,Values: [" + keyValArr.join("] -> [") + "] ";
     }
 }
 
-
-
-const test = new HashMap();
-test.set('apple', 'red');

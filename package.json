@@ -1,0 +1,25 @@
+{
+  "name": "odin_hashmap",
+  "version": "1.0.0",
+  "description": "Odin Project's HashMap project. Build a HashMap with JS.",
+  "homepage": "https://github.com/Crisk-o/Odin_hashmap#readme",
+  "bugs": {
+    "url": "https://github.com/Crisk-o/Odin_hashmap/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crisk-o/Odin_hashmap.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.6",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.3"
+  }
+}

@@ -9,9 +9,12 @@ export class Node{
 
 export class LinkedLists{
     // give constructor a node to be the head/root
-    constructor(rootNode){
-        this.root = rootNode;
-    }
+    // constructor(rootNode){
+    //     if(rootNode === null){
+    //         this.root = null;
+    //     }
+    //     this.root = rootNode;
+    // }
     constructor(){
         this.root = null;
     }
@@ -119,6 +122,19 @@ export class LinkedLists{
         }
         while(head !== null){
             if(head.info[1] === value){
+                return true;
+            }
+            head = head.nextNode;
+        }
+        return false;
+    }
+    containsKey(key){
+        let head = this.root;
+        if(head === null){
+            return false;
+        }
+        while(head !== null){
+            if(head.info[0] === key){
                 return true;
             }
             head = head.nextNode;
