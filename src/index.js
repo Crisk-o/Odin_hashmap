@@ -27,5 +27,5 @@ console.log("ALL ENTRIES: \n" + test.entries()); //
 test.remove('dog');
 test.remove('hat');
 console.log("AFTER 'DOG' & 'HAT' KEY REMOVALS:\n" + test.entries());
-
-
+test.clear();
+console.log(test.entries()) // should be empty!
