@@ -42,7 +42,7 @@ export class HashMap{
         }
 
     }
-    // for use in the set function to increase the capacity/# of buckets
+    // for use in set function to increase the capacity/# of buckets
     resize(){
         let oldBuckets = this.buckets;
         this.capacity *= 2;
@@ -81,18 +81,19 @@ export class HashMap{
     has(key){
         // FINDS INDEX FOR PROVIDED KEY.
         const index = this.hash(key);
+        if(index < 0 || index >= this.buckets.length)
+                throw new Error("Trying to access index out of bounds");
         // GO TO INDEX POSITION IN BUCKETS ARRAY OF LL
         const bucket = this.buckets[index]
         // RETURN T/F IF KEY IS FOUND IN BUCKET AT INDEX.
         return bucket.containsKey(key);
     }
     // given key, if it is in hash map, remove entry with that key and return true, else false.
+    // delete the key and its entries
     remove(key){
         if(this.has(key)){
-            // delete the key and its entries
-            const index = this.hash(key);
-            const bucket = this.buckets[index];
-            bucket.removeAt(index);
+            let index = this.hash(key);
+            this.buckets[index].removeKey(key);
             this.size--;
             return true;
         }  
@@ -100,11 +101,6 @@ export class HashMap{
     }
     // returns number of stored keys in the hash map
     length(){
-        // let count = 0;
-        // for(let i = 0; i < this.buckets.length; i++){
-        //     count += this.buckets[i].size();
-        // }
-        // return count;
         return this.size;
     }
     // removes all entries in the hash map
@@ -120,17 +116,8 @@ export class HashMap{
                 let key = this.buckets[i].root.info[0];
                 keyArray.push(key);
             }
-
-            
-            // if(this.buckets[i].root !== null){
-            //     let current = this.buckets[i].root;  
-            //     while(current !== null){
-            //         keyArray.push(current.info[0]);
-            //         current = current.nextNode;
-            //     }
-            // }
         }
-        return "Keys: " + keyArray.toString();
+        return "Keys: " + keyArray.join(", ");
     }
 
     //returns array containg all the values
@@ -146,19 +133,12 @@ export class HashMap{
         return "Values: " + valueArray.toString();
     }
     // returns array that contains each key,value pair. 
-    // Ex: [[firstKey, firstValue], [secondKey, secondValue]]
     entries(){
         let keyValArr = [];
         //LOOP THROUGH EVERY BUCKET
         for(let i = 0; i < this.buckets.length; i++){
             if(this.buckets[i].root !== null){
                 keyValArr.push(this.buckets[i].root.info);
-                // LOOP THROUGH EVERY LL CONTAINED IN EACH BUCKET.
-                // while(current !== null){
-                //     const [key, value] = current.info;
-                //     keyValArr.push([key, value]);  
-                //     current = current.nextNode;
-                // }
             }
         }
         return "Key,Values: [" + keyValArr.join("] -> [") + "] ";

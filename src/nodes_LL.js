@@ -8,13 +8,6 @@ export class Node{
 }
 
 export class LinkedLists{
-    // give constructor a node to be the head/root
-    // constructor(rootNode){
-    //     if(rootNode === null){
-    //         this.root = null;
-    //     }
-    //     this.root = rootNode;
-    // }
     constructor(){
         this.root = null;
     }
@@ -40,9 +33,11 @@ export class LinkedLists{
     // newNode placed at beginning of LL.
     prepend(value){
         let newNode = new Node(value);
-        if(this.root === null){
-            this.root = newNode;
-        }
+        // code below was creating an infinite loop. 
+        // newNode.nextNode was pointing back to itself b/c root = newNode and then newNode.nextNode = root as well. 
+        // if(this.root === null){
+        //     this.root = newNode;
+        // }
         newNode.nextNode = this.root;
         this.root = newNode;
     }
@@ -71,7 +66,7 @@ export class LinkedLists{
     size(){
         let count = 0;
         let head = this.root;
-        if(head === null)
+        if(this.root === null)
             return 0;
         while(head !== null){
             count ++;
@@ -82,8 +77,8 @@ export class LinkedLists{
     atIndex(index){
         let count = 0;
         let head = this.root;
-        const size = this.size();
-        if(index >= size){
+        // const size = this.size();
+        if(index >= this.size){
             return undefined;
         }
         while(count != index && head.nextNode !== null){
@@ -104,13 +99,12 @@ export class LinkedLists{
         return null;
     }
     //removes head node and returns its value
-    pop(){
+    shift(){
         if(this.root === null){
-            return "head is undefined";
+            return null;
         }
         let headVal = this.root.info;
-        let newHead = this.root.nextNode;
-        this.root = newHead;
+        this.root = this.root.nextNode;
         return headVal;
 
     }
@@ -184,8 +178,8 @@ export class LinkedLists{
         return prev;
     }
     removeAt(index){
-        if(index == 0){
-            this.pop();
+        if(index === 0){
+            this.shift();
         }
         let size = this.size();
         if(index >= size){
@@ -194,7 +188,7 @@ export class LinkedLists{
         let prev = null;
         let count = 0;
         let current = this.root;
-        while(count != index && current.nextNode !== null){
+        while(count < index && current !== null){
             prev = current;
             current = current.nextNode;
             prev.nextNode = current;
@@ -203,6 +197,21 @@ export class LinkedLists{
         // current node will be AT the index. prev is node right before index.
         current = current.nextNode;
         prev.nextNode = current; // should overwrite the value;
+    }
+    removeKey(key){
+        if(this.root === null){ return null; }
+        if(this.root.info[0] === key){
+            this.root = this.root.nextNode
+        }
+        let current = this.root;
+        while(current !== null){
+            if(current.info[0] === key){
+                current = current.nextNode.nextNode; // skips a link in the chain and overwrites it
+                return true;
+            }
+            current = current.nextNode;
+        }
+        return false;
     }
 
     toString(){
